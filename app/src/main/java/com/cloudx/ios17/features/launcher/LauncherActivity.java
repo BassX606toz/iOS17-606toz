@@ -134,10 +134,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import com.cloudx.ios17.BlissLauncher;
 import com.cloudx.ios17.core.Alarm;
@@ -1423,9 +1421,19 @@ public class LauncherActivity extends AppCompatActivity
         openUsageAccessSettingsTv.setVisibility(GONE);
         suggestedAppsGridLayout.setVisibility(VISIBLE);
 
-        List<ApplicationItem> suggestedApps = usageStats.stream().map(UsageStats::getPackageName)
-                .map(packageName -> AppUtils.createAppItem(this, packageName, new UserHandle()))
-                .filter(Objects::nonNull).limit(4).collect(Collectors.toList());
+        // Ditulis dengan loop biasa: tidak butuh java.util.stream (desugaring), lebih ringan
+        // di ART lawas dan alokasi iterator lebih sedikit.
+        List<ApplicationItem> suggestedApps = new ArrayList<>();
+        for (UsageStats stats : usageStats) {
+            ApplicationItem item =
+                    AppUtils.createAppItem(this, stats.getPackageName(), new UserHandle());
+            if (item != null) {
+                suggestedApps.add(item);
+                if (suggestedApps.size() == 4) {
+                    break;
+                }
+            }
+        }
 
         if (!forceRefresh && suggestedApps.equals(mSuggestedApps)) {
             // no changes, skip update
@@ -1433,8 +1441,9 @@ public class LauncherActivity extends AppCompatActivity
         }
 
         suggestedAppsGridLayout.removeAllViews();
-        suggestedApps.stream().map(this::prepareSuggestedApp)
-                .forEach(view -> addAppToGrid(suggestedAppsGridLayout, view));
+        for (ApplicationItem item : suggestedApps) {
+            addAppToGrid(suggestedAppsGridLayout, prepareSuggestedApp(item));
+        }
         mSuggestedApps = suggestedApps;
 
         // remove force flag
@@ -1762,7 +1771,9 @@ public class LauncherActivity extends AppCompatActivity
         String query = Utilities.stripCaseAndAccents(charSequence.toString());
         SuggestionsResult suggestionsResult = new SuggestionsResult(query);
         List<LauncherItem> launcherItems = new ArrayList<>();
-        pages.parallelStream().forEach(gridLayout -> {
+        // Sebelumnya parallelStream(): butuh desugaring, boros thread, dan tidak aman
+        // karena menulis ke ArrayList yang sama dari banyak thread.
+        for (GridLayout gridLayout : pages) {
             for (int i = 0; i < gridLayout.getChildCount(); i++) {
                 BlissFrameLayout blissFrameLayout = (BlissFrameLayout) gridLayout.getChildAt(i);
                 LauncherItem launcherItem = blissFrameLayout.getLauncherItem();
@@ -1777,7 +1788,7 @@ public class LauncherActivity extends AppCompatActivity
                     launcherItems.add(launcherItem);
                 }
             }
-        });
+        }
 
         for (int i = 0; i < mDock.getChildCount(); i++) {
             BlissFrameLayout blissFrameLayout = (BlissFrameLayout) mDock.getChildAt(i);

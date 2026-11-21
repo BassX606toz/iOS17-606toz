@@ -1,25 +1,38 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in /home/simple/Android/Sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.kts.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Aturan R8 untuk build release (minify + resource shrinking aktif).
+# Tujuan: tetap aman untuk launcher yang banyak pakai custom View & reflect API framework.
 
-# Add any project specific keep options here:
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Custom View dipakai dari XML layout -> konstruktor (Context, AttributeSet) wajib ada.
+-keep public class * extends android.view.View {
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+    public void set*(...);
+}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Parcelable / enum yang dipakai lintas komponen.
+-keepclassmembers class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Refine (hidden API stubs) dipanggil lewat reflect ke framework.
+-dontwarn dev.rikka.tools.refine.**
+-keep class dev.rikka.tools.refine.** { *; }
+
+# Library pihak ketiga: jangan gagal build karena warning referensi opsional.
+-dontwarn io.reactivex.**
+-dontwarn rx.**
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn retrofit2.**
+-dontwarn com.google.gson.**
+-dontwarn lineageos.**
+-dontwarn foundation.e.**
+-dontwarn com.hoko.blur.**

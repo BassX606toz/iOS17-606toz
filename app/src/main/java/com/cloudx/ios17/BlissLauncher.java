@@ -13,8 +13,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.cloudx.ios17.core.IconsHandler;
-import com.cloudx.ios17.core.IconsHandler;
 import com.cloudx.ios17.R;
 import com.cloudx.ios17.core.DeviceProfile;
 import com.cloudx.ios17.core.IconsHandler;
@@ -22,8 +20,6 @@ import com.cloudx.ios17.core.blur.BlurWallpaperProvider;
 import com.cloudx.ios17.core.customviews.WidgetHost;
 import com.cloudx.ios17.features.launcher.AppProvider;
 import com.cloudx.ios17.features.notification.NotificationService;
-import com.cloudx.ios17.core.IconsHandler;
-import foundation.e.lib.telemetry.Telemetry;
 import timber.log.Timber;
 
 public class BlissLauncher extends Application {
@@ -68,7 +64,6 @@ public class BlissLauncher extends Application {
         getContentResolver().registerContentObserver(NOTIFICATION_BADGING_URI, false, notificationSettingsObserver);
 
         if (!BuildConfig.DEBUG) {
-            Telemetry.init(BuildConfig.SENTRY_DSN, this, true);
             Timber.plant(new ReleaseTree());
         } else {
             Timber.plant(new Timber.DebugTree());

@@ -21,10 +21,10 @@ import com.cloudx.ios17.core.database.LauncherDB;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Migration {
 
@@ -65,8 +65,14 @@ public class Migration {
         CurrentMigration currentMigration = new Gson().fromJson(migrationInfo, CurrentMigration.class);
         int oldVersion = Preferences.getCurrentMigrationVersion(context);
         if (oldVersion < currentMigration.currentVersion) {
-            List<MigrationInfo> infos = currentMigration.migrate_infos.parallelStream()
-                    .filter(migrationInfo1 -> migrationInfo1.startVersion >= oldVersion).collect(Collectors.toList());
+            // Loop biasa menggantikan parallelStream(): tanpa desugaring & tanpa thread pool
+            // tambahan di perangkat low-end.
+            List<MigrationInfo> infos = new ArrayList<>();
+            for (MigrationInfo info : currentMigration.migrate_infos) {
+                if (info.startVersion >= oldVersion) {
+                    infos.add(info);
+                }
+            }
             Log.i(TAG, "migrateSafely: " + infos.size());
             Collections.sort(infos);
             for (MigrationInfo info : infos) {

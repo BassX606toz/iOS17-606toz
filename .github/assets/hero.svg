@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-label="606toz Community - iOS 17 Launcher for Android">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0f24"><animate attributeName="stop-color" values="#0a0f24;#1a1147;#0a0f24" dur="9s" repeatCount="indefinite"/></stop>
+      <stop offset="55%" stop-color="#11183a"><animate attributeName="stop-color" values="#11183a;#0c2f4e;#11183a" dur="9s" repeatCount="indefinite"/></stop>
+      <stop offset="100%" stop-color="#050914"><animate attributeName="stop-color" values="#050914;#120b2e;#050914" dur="9s" repeatCount="indefinite"/></stop>
+    </linearGradient>
+
+    <linearGradient id="word" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5ee7ff"><animate attributeName="stop-color" values="#5ee7ff;#a78bfa;#ff7ac6;#5ee7ff" dur="6s" repeatCount="indefinite"/></stop>
+      <stop offset="50%" stop-color="#a78bfa"><animate attributeName="stop-color" values="#a78bfa;#ff7ac6;#5ee7ff;#a78bfa" dur="6s" repeatCount="indefinite"/></stop>
+      <stop offset="100%" stop-color="#ff7ac6"><animate attributeName="stop-color" values="#ff7ac6;#5ee7ff;#a78bfa;#ff7ac6" dur="6s" repeatCount="indefinite"/></stop>
+    </linearGradient>
+
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5ee7ff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#5ee7ff"/>
+      <stop offset="100%" stop-color="#ff7ac6" stop-opacity="0"/>
+    </linearGradient>
+
+    <radialGradient id="orbA"><stop offset="0%" stop-color="#5ee7ff" stop-opacity=".75"/><stop offset="100%" stop-color="#5ee7ff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="orbB"><stop offset="0%" stop-color="#a78bfa" stop-opacity=".7"/><stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/></radialGradient>
+    <radialGradient id="orbC"><stop offset="0%" stop-color="#ff7ac6" stop-opacity=".55"/><stop offset="100%" stop-color="#ff7ac6" stop-opacity="0"/></radialGradient>
+
+    <filter id="blur"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1" fill="#ffffff" opacity=".06"/>
+    </pattern>
+  </defs>
+
+  <!-- background -->
+  <rect width="1200" height="320" rx="24" fill="url(#bg)"/>
+  <rect width="1200" height="320" rx="24" fill="url(#dots)"/>
+
+  <!-- floating glow orbs -->
+  <circle cx="180" cy="90" r="130" fill="url(#orbA)" filter="url(#blur)">
+    <animate attributeName="cy" values="90;140;90" dur="7s" repeatCount="indefinite"/>
+    <animate attributeName="cx" values="180;240;180" dur="11s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="980" cy="230" r="150" fill="url(#orbB)" filter="url(#blur)">
+    <animate attributeName="cy" values="230;160;230" dur="9s" repeatCount="indefinite"/>
+    <animate attributeName="cx" values="980;910;980" dur="13s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="640" cy="40" r="110" fill="url(#orbC)" filter="url(#blur)">
+    <animate attributeName="cy" values="40;80;40" dur="8s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- pulsing rings -->
+  <g fill="none" stroke="#5ee7ff" stroke-width="1.5" opacity=".55">
+    <circle cx="1060" cy="78" r="22">
+      <animate attributeName="r" values="18;42;18" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".55;0;.55" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1060" cy="78" r="22">
+      <animate attributeName="r" values="18;42;18" dur="4s" begin="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".55;0;.55" dur="4s" begin="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- app-icon-like squircle badge -->
+  <g transform="translate(74 96)">
+    <rect width="128" height="128" rx="34" fill="#171b3a" stroke="#ffffff" stroke-opacity=".16" stroke-width="2"/>
+    <rect x="6" y="6" width="116" height="116" rx="29" fill="url(#word)" opacity=".16"/>
+    <text x="64" y="88" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="800" fill="url(#word)" filter="url(#glow)">6</text>
+    <circle cx="102" cy="30" r="6" fill="#5ee7ff">
+      <animate attributeName="opacity" values="1;.2;1" dur="2.2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- wordmark -->
+  <text x="246" y="156" font-family="Arial, Helvetica, sans-serif" font-size="74" font-weight="800" letter-spacing="-3" fill="url(#word)" filter="url(#glow)">606toz</text>
+  <text x="250" y="192" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" letter-spacing="6" fill="#cbd5f5">COMMUNITY</text>
+  <text x="250" y="228" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#93a4cf">iOS 17 Launcher for Android · Legacy-optimized build</text>
+
+  <!-- animated accent bar -->
+  <rect x="250" y="252" width="360" height="4" rx="2" fill="#ffffff" opacity=".08"/>
+  <rect x="250" y="252" width="140" height="4" rx="2" fill="url(#bar)">
+    <animate attributeName="x" values="250;470;250" dur="4.5s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- floating mini app icons -->
+  <g opacity=".9">
+    <g transform="translate(760 70)">
+      <rect width="52" height="52" rx="14" fill="#1d2748" stroke="#5ee7ff" stroke-opacity=".3"/>
+      <circle cx="26" cy="26" r="10" fill="none" stroke="#5ee7ff" stroke-width="3"/>
+      <animateTransform attributeName="transform" type="translate" values="760 70;760 58;760 70" dur="5s" repeatCount="indefinite" additive="sum"/>
+    </g>
+    <g transform="translate(840 190)">
+      <rect width="52" height="52" rx="14" fill="#2a1c46" stroke="#a78bfa" stroke-opacity=".3"/>
+      <rect x="17" y="17" width="18" height="18" rx="5" fill="#a78bfa"/>
+      <animateTransform attributeName="transform" type="translate" values="840 190;840 204;840 190" dur="6s" repeatCount="indefinite" additive="sum"/>
+    </g>
+    <g transform="translate(900 96)">
+      <rect width="52" height="52" rx="14" fill="#451c3a" stroke="#ff7ac6" stroke-opacity=".3"/>
+      <path d="M18 32 L26 18 L34 32 Z" fill="#ff7ac6"/>
+      <animateTransform attributeName="transform" type="translate" values="900 96;900 84;900 96" dur="7s" repeatCount="indefinite" additive="sum"/>
+    </g>
+  </g>
+</svg>

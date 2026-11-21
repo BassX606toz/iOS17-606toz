@@ -137,6 +137,12 @@ class BlurViewDelegate(
 
     private fun createFullBlurDrawable() {
         fullBlurDrawable?.let { if (view.isAttachedToWindow) it.stopListening() }
+        // Jangan buat drawable/listener blur sama sekali saat blur dimatikan (HP low-RAM).
+        if (!BlurWallpaperProvider.isEnabled) {
+            fullBlurDrawable = null
+            view.invalidate()
+            return
+        }
         fullBlurDrawable =
             blurWallpaperProvider.createBlurDrawable(config).apply {
                 callback = blurDrawableCallback

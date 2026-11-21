@@ -59,7 +59,9 @@ class BlurWallpaperProvider(val context: Context) {
         updateAsync()
     }
 
-    private fun getEnabledStatus() = wallpaperManager.wallpaperInfo == null
+    // HP low-RAM: blur dimatikan total supaya hemat heap & CPU.
+    private fun getEnabledStatus() =
+        wallpaperManager.wallpaperInfo == null && !Utilities.isLowMemoryDevice(context)
 
     fun updateAsync() {
         com.cloudx.ios17.core.Utilities.THREAD_POOL_EXECUTOR.execute(mUpdateRunnable)
@@ -71,15 +73,22 @@ class BlurWallpaperProvider(val context: Context) {
             return
         }
 
-        // Prepare a placeholder before hand so that it can be used in case wallpaper is null
-        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display = wm.defaultDisplay
-        display.getRealMetrics(displayMetrics)
-        val width = displayMetrics.widthPixels
-        val height = displayMetrics.heightPixels
-        placeholder = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(placeholder!!)
-        canvas.drawColor(0x44000000)
+        // Placeholder 1x1 sudah cukup karena BitmapShader memakai TileMode.CLAMP.
+        // Di perangkat low-RAM hindari alokasi bitmap seukuran layar.
+        if (Utilities.isLowMemoryDevice(context)) {
+            val tiny = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+            tiny.setPixel(0, 0, 0x44000000.toInt())
+            placeholder = tiny
+        } else {
+            val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val display = wm.defaultDisplay
+            display.getRealMetrics(displayMetrics)
+            val width = displayMetrics.widthPixels
+            val height = displayMetrics.heightPixels
+            placeholder = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(placeholder!!)
+            canvas.drawColor(0x44000000)
+        }
 
         if (
             ActivityCompat.checkSelfPermission(

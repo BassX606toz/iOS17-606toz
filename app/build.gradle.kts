@@ -41,17 +41,30 @@ android {
         versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-        renderscriptTargetApi = 28
-        renderscriptSupportModeEnabled = true
         setProperty("archivesBaseName", "BlissLauncher-$versionName")
+
+        // Optional: batasi bahasa yang dikemas, mis. resConfigs=en,id di local.properties.
+        // Tanpa ini, semua terjemahan tetap dibawa (belum terkena resource shrinking).
+        val localeList = (localProps.getProperty("resConfigs") ?: "")
+            .split(",")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+        if (localeList.isNotEmpty()) {
+            resourceConfigurations += localeList
+        }
     }
 
     buildFeatures { buildConfig = true }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            // R8 + resource shrinking: APK jauh lebih kecil & startup lebih ringan.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             signingConfig = signingConfigs.getByName("debug")
         }
 
@@ -68,9 +81,6 @@ android {
             isDebuggable = false
         }
 
-        configureEach {
-            buildConfigField("String", "SENTRY_DSN", "\"${System.getenv("SENTRY_DSN")}\"")
-        }
     }
 
     signingConfigs {
@@ -84,23 +94,10 @@ android {
 
     flavorDimensions.add("api")
     productFlavors {
-        create("apiQ") {
-            dimension = "api"
-            minSdk = 27
-            targetSdk = 29
-        }
-
-        create("apiR") {
-            dimension = "api"
-            minSdk = 27
-            targetSdk = 29
-        }
-
-        create("apiS") {
-            dimension = "api"
-            minSdk = 27
-            targetSdk = 29
-        }
+        // Semua flavor mewarisi minSdk/targetSdk dari defaultConfig (minSdk 23).
+        create("apiQ") { dimension = "api" }
+        create("apiR") { dimension = "api" }
+        create("apiS") { dimension = "api" }
     }
 
     // Always show the result of every unit test, even if it passes.
@@ -109,7 +106,6 @@ android {
     }
 
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -161,24 +157,16 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
 
-    // Misc.
+    // Misc. (dependency tak terpakai & berat sudah dibuang:
+    // apache-commons, eventbus, restriction-bypass, profileinstaller, desugaring)
     implementation(libs.hoko.blur)
-    implementation(libs.apache.commons)
     implementation(libs.kotlin.stdlib.jdk7)
-    implementation(libs.greenrobot.eventbus)
     implementation(libs.circleindicator)
-    implementation(libs.restriction.bypass)
     implementation(libs.tools.timber)
     debugImplementation(libs.debug.db)
-    coreLibraryDesugaring(libs.tools.desugar)
-    implementation(libs.androidx.profileinstaller)
     debugImplementation(libs.tools.leakcanary)
 
     // Testing dependencies
     testImplementation(libs.bundles.testing.unit)
     testImplementation(libs.bundles.testing.android)
-
-    // elib
-    implementation(libs.elib)
-    implementation(libs.telemetry)
 }

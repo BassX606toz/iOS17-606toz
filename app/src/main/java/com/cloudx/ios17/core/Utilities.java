@@ -1,5 +1,6 @@
 package com.cloudx.ios17.core;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,8 +26,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.lang3.StringUtils;
-
 import timber.log.Timber;
 
 public class Utilities {
@@ -217,6 +217,24 @@ public class Utilities {
     }
 
     public static String stripCaseAndAccents(String input) {
-        return StringUtils.stripAccents(input.toLowerCase());
+        // Pengganti org.apache.commons.lang3.StringUtils.stripAccents tanpa library tambahan.
+        return Normalizer.normalize(input.toLowerCase(), Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+    }
+
+    /**
+     * Deteksi perangkat dengan RAM/heap kecil. Dipakai untuk mematikan efek mahal
+     * (blur wallpaper) secara otomatis agar launcher tetap ringan di HP lawas.
+     */
+    public static boolean isLowMemoryDevice(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (am == null) {
+            return false;
+        }
+        if (Build.VERSION.SDK_INT >= 19 && am.isLowRamDevice()) {
+            return true;
+        }
+        // Heap maksimal < 96 MB: anggap low-end.
+        return Runtime.getRuntime().maxMemory() < 96L * 1024L * 1024L;
     }
 }
