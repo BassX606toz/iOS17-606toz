@@ -25,7 +25,6 @@ Perubahan utama:
 Library ini tidak dipakai di kode tapi ikut terpaket / menambah dex:
 - `foundation.e.lib:telemetry` (+ inisialisasi Sentry di `BlissLauncher`)
 - `org.greenrobot:eventbus`
-- `foundation.e:elib`
 - `org.apache.commons:commons-lang3` (diganti `java.text.Normalizer`)
 - `com.github.ChickenHook:RestrictionBypass`
 - `androidx.profileinstaller`

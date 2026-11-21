@@ -41,7 +41,7 @@ Launcher Android dengan **nuansa iOS 17** — home screen, dock, folder, widget,
 | **Desugaring + `Stream`** | Aktif | Dihapus (diganti loop) |
 | **RenderScript support lib** | Aktif (padahal unused) | Dihapus |
 | **Telemetry / Sentry** | Aktif | Dihapus |
-| **Dependency unused** | EventBus, elib, Apache Commons, RestrictionBypass, ProfileInstaller | Bersih |
+| **Dependency unused** | EventBus, Apache Commons, RestrictionBypass, ProfileInstaller, Telemetry | Bersih |
 | **Blur di HP low-RAM** | Selalu jalan | **Auto-off** + placeholder 1×1 |
 | **Bahasa dikemas** | Semua locale | Bisa dibatasi (`resConfigs`) |
 

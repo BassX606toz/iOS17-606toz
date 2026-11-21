@@ -158,8 +158,10 @@ dependencies {
     implementation(libs.okhttp.logging)
 
     // Misc. (dependency tak terpakai & berat sudah dibuang:
-    // apache-commons, eventbus, restriction-bypass, profileinstaller, desugaring)
+    // apache-commons, eventbus, restriction-bypass, profileinstaller, desugaring, telemetry)
     implementation(libs.hoko.blur)
+    // elib menyediakan resource e_* (warna/drawable) yang dipakai layout & theme.
+    implementation(libs.elib)
     implementation(libs.kotlin.stdlib.jdk7)
     implementation(libs.circleindicator)
     implementation(libs.tools.timber)
