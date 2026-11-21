@@ -20,6 +20,9 @@ jobs:
     name: Build release APKs
     runs-on: ubuntu-latest
 
+    env:
+      SKIP_JDK_VERSION_CHECK: 'true'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,6 +38,11 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          # cmdline-tools terbaru butuh JDK 17; AGP 7.3.1 di project ini pakai JDK 11.
+          cmdline-tools-version: '8512546'
+        env:
+          SKIP_JDK_VERSION_CHECK: 'true'
 
       - name: Install SDK components
         run: |
