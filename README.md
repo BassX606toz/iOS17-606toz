@@ -14,7 +14,7 @@
 
 <br>
 
-[![Build](https://img.shields.io/badge/build-legacy--ready-34d399?style=for-the-badge&logo=android)](https://github.com/BassX606toz/iOS17-606toz/actions)
+[![Build APK](https://github.com/BassX606toz/iOS17-606toz/actions/workflows/build.yml/badge.svg)](https://github.com/BassX606toz/iOS17-606toz/actions/workflows/build.yml)
 [![minSdk](https://img.shields.io/badge/minSdk-23%20%28Android%206%29-5ee7ff?style=for-the-badge&logo=android)](https://developer.android.com)
 [![Java](https://img.shields.io/badge/language-Java%20%2B%20Kotlin-f89820?style=for-the-badge&logo=openjdk)](https://www.java.com)
 [![License](https://img.shields.io/badge/license-GPL--3.0-a78bfa?style=for-the-badge)](LICENSE)
@@ -106,6 +106,20 @@ resConfigs=en,id
 | `apiS` | /e/ OS Android S SDK jar |
 
 > ⚠️ Karena launcher ini memakai API sistem & hidden API (lewat Refine), pemasangan sebagai system app / dengan permission platform akan memberikan hasil terbaik.
+
+---
+
+## 🤖 CI & Release otomatis
+
+GitHub Actions ([`.github/workflows/build.yml`](.github/workflows/build.yml)) jalan otomatis:
+
+- **Push ke `master` / Pull Request** → build ke-3 flavor + upload APK sebagai artifact.
+- **Tag `v*`** (misal `v1.16.0`) → build + **bikin GitHub Release** dan lampirkan semua APK.
+
+```bash
+git tag v1.16.0
+git push origin v1.16.0
+```
 
 ---
 
